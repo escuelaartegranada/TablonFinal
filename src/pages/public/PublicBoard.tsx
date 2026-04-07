@@ -97,7 +97,7 @@ export default function PublicBoard() {
               className="w-full max-w-4xl bg-white/5 backdrop-blur-md border border-white/10 rounded-[2rem] p-8 md:p-16 shadow-2xl flex flex-col gap-8 md:gap-12"
             >
               {currentAnnouncement.category && (
-                <div className="self-start px-4 py-1.5 rounded-full border border-white/80 text-xs md:text-sm font-medium tracking-widest uppercase text-white/80">
+                <div className="self-start px-4 py-1.5 rounded-full border border-white/70 text-xs md:text-sm font-medium tracking-widest uppercase text-white/80">
                   {currentAnnouncement.category}
                 </div>
               )}
@@ -107,13 +107,13 @@ export default function PublicBoard() {
                   {currentAnnouncement.title}
                 </h1>
                 {currentAnnouncement.summary && (
-                  <p className="text-xl sm:text-2xl md:text-3xl text-white/80 font-light leading-relaxed text-balance">
+                  <p className="text-xl sm:text-2xl md:text-3xl text-white/50 font-light leading-relaxed text-balance">
                     {currentAnnouncement.summary}
                   </p>
                 )}
               </div>
 
-              <div className="mt-auto pt-8 md:pt-12 flex flex-col sm:flex-row items-start sm:items-end justify-between border-t border-white/10 gap-6 sm:gap-0">
+              <div className="mt-auto pt-8 md:pt-12 flex flex-col sm:flex-row items-start sm:items-end justify-between border-t border-white/50 gap-6 sm:gap-0">
                 <div className="flex flex-col gap-2 max-w-full sm:max-w-[60%]">
                   <span className="text-base md:text-lg text-white/60 font-medium">Escanea para más detalles</span>
                   <span className="text-xs md:text-sm text-white/40 font-mono break-all">{baseUrl}/anuncio/{currentAnnouncement.slug}</span>
