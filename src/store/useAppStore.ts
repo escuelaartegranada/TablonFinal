@@ -11,6 +11,7 @@ interface AppState {
   
   // Actions
   initialize: () => Promise<void>;
+  fetchData: () => Promise<void>;
   logout: () => Promise<void>;
   addAnnouncement: (announcement: Omit<Announcement, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
   updateAnnouncement: (id: string, announcement: Partial<Announcement>) => Promise<void>;
@@ -69,6 +70,20 @@ export const useAppStore = create<AppState>((set, get) => ({
   isLoading: true,
   isInitialized: false,
 
+  fetchData: async () => {
+    const [announcementsRes, settingsRes] = await Promise.all([
+      supabase.from('announcements').select('*').order('priority', { ascending: false }).order('created_at', { ascending: false }),
+      supabase.from('settings').select('*').limit(1).single()
+    ]);
+
+    if (announcementsRes.data) {
+      set({ announcements: announcementsRes.data.map(mapAnnouncement) });
+    }
+    if (settingsRes.data) {
+      set({ settings: mapSettings(settingsRes.data) });
+    }
+  },
+
   initialize: async () => {
     if (get().isInitialized) return;
     set({ isInitialized: true, isLoading: true });
@@ -83,36 +98,45 @@ export const useAppStore = create<AppState>((set, get) => ({
     });
 
     // Fetch initial data
-    const [announcementsRes, settingsRes] = await Promise.all([
-      supabase.from('announcements').select('*').order('priority', { ascending: false }).order('created_at', { ascending: false }),
-      supabase.from('settings').select('*').limit(1).single()
-    ]);
-
-    if (announcementsRes.data) {
-      set({ announcements: announcementsRes.data.map(mapAnnouncement) });
-    }
-    if (settingsRes.data) {
-      set({ settings: mapSettings(settingsRes.data) });
-    }
+    await get().fetchData();
 
     set({ isLoading: false });
+
+    // Polling fallback (every 30 seconds)
+    const pollInterval = setInterval(async () => {
+      console.log('Polling for updates...');
+      await get().fetchData();
+    }, 30000);
+
+    // Re-fetch on tab focus
+    const handleVisibilityChange = async () => {
+      if (document.visibilityState === 'visible') {
+        console.log('Tab focused, re-fetching data...');
+        await get().fetchData();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     // Setup realtime subscriptions
     await supabase.removeAllChannels();
 
     supabase.channel('public:announcements')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, async () => {
-        const { data } = await supabase.from('announcements').select('*').order('priority', { ascending: false }).order('created_at', { ascending: false });
-        if (data) set({ announcements: data.map(mapAnnouncement) });
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, async (payload) => {
+        console.log('Realtime change received for announcements:', payload);
+        await get().fetchData();
       })
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Realtime subscription status (announcements):', status);
+      });
 
     supabase.channel('public:settings')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'settings' }, async () => {
-        const { data } = await supabase.from('settings').select('*').limit(1).single();
-        if (data) set({ settings: mapSettings(data) });
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'settings' }, async (payload) => {
+        console.log('Realtime change received for settings:', payload);
+        await get().fetchData();
       })
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Realtime subscription status (settings):', status);
+      });
   },
 
   logout: async () => {
@@ -126,6 +150,8 @@ export const useAppStore = create<AppState>((set, get) => ({
       console.error('Error adding announcement:', error);
       throw error;
     }
+    // Manual re-fetch to ensure UI updates immediately
+    await get().fetchData();
   },
   
   updateAnnouncement: async (id, updatedFields) => {
@@ -134,6 +160,8 @@ export const useAppStore = create<AppState>((set, get) => ({
       console.error('Error updating announcement:', error);
       throw error;
     }
+    // Manual re-fetch to ensure UI updates immediately
+    await get().fetchData();
   },
   
   deleteAnnouncement: async (id) => {
@@ -142,19 +170,27 @@ export const useAppStore = create<AppState>((set, get) => ({
       console.error('Error deleting announcement:', error);
       throw error;
     }
+    // Manual re-fetch to ensure UI updates immediately
+    await get().fetchData();
   },
   
   updateSettings: async (newSettings) => {
-    const { data } = await supabase.from('settings').select('id').limit(1).single();
-    if (data?.id) {
+    const { data: settingsData } = await supabase.from('settings').select('id').limit(1).single();
+    if (settingsData?.id) {
       const { error } = await supabase.from('settings').update({
         display_mode: newSettings.displayMode,
         rotation_duration: newSettings.rotationDuration,
         transition_duration: newSettings.transitionDuration,
         transition_type: newSettings.transitionType,
         updated_at: new Date().toISOString()
-      }).eq('id', data.id);
-      if (error) console.error('Error updating settings:', error);
+      }).eq('id', settingsData.id);
+      
+      if (error) {
+        console.error('Error updating settings:', error);
+      } else {
+        // Manual re-fetch to ensure UI updates immediately
+        await get().fetchData();
+      }
     }
   },
 }));
