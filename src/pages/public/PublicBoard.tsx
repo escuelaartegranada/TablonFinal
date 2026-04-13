@@ -110,7 +110,7 @@ export default function PublicBoard() {
               animate={selectedVariant.animate}
               exit={selectedVariant.exit}
               transition={transition}
-              className="w-full max-w-4xl bg-white/5 backdrop-blur-md border border-white/30 rounded-[2rem] p-8 md:p-16 shadow-2xl flex flex-col gap-8 md:gap-12"
+              className="w-full max-w-4xl bg-white/5 backdrop-blur-md border border-white/10 rounded-[2rem] p-8 md:p-16 shadow-2xl flex flex-col gap-8 md:gap-12"
             >
               {currentAnnouncement.category && (
                 <div className="self-start px-4 py-1.5 rounded-full border border-white/30 text-xs md:text-sm font-medium tracking-widest uppercase text-white/80">
