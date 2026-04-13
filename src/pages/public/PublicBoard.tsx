@@ -131,7 +131,7 @@ export default function PublicBoard() {
                 )}
               </div>
 
-              <div className="mt-auto pt-8 md:pt-12 flex flex-col sm:flex-row items-start sm:items-end justify-between border-t border-white/10 gap-6 sm:gap-0">
+              <div className="mt-auto pt-8 md:pt-12 flex flex-col sm:flex-row items-start sm:items-end justify-between border-t border-white/20 gap-6 sm:gap-0">
                 <div className="flex flex-col gap-2 max-w-full sm:max-w-[60%]">
                   <span className="text-base md:text-lg text-white/60 font-medium">Escanea para más detalles</span>
                   <span className="text-xs md:text-sm text-white/40 font-mono break-all">{baseUrl}/anuncio/{currentAnnouncement.slug}</span>
