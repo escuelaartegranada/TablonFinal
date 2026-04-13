@@ -119,13 +119,15 @@ export default function PublicBoard() {
               )}
               
               <div className="flex flex-col gap-4 md:gap-6">
-                <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-semibold leading-[1.1] tracking-tight text-balance">
-                  {currentAnnouncement.title}
-                </h1>
+                <h1 
+                  className="text-4xl sm:text-5xl md:text-7xl font-display font-semibold leading-[1.1] tracking-tight"
+                  dangerouslySetInnerHTML={{ __html: currentAnnouncement.title }}
+                />
                 {currentAnnouncement.summary && (
-                  <p className="text-xl sm:text-2xl md:text-3xl text-white/80 font-light leading-relaxed text-balance">
-                    {currentAnnouncement.summary}
-                  </p>
+                  <p 
+                    className="text-xl sm:text-2xl md:text-3xl text-white/80 font-light leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: currentAnnouncement.summary }}
+                  />
                 )}
               </div>
 
@@ -163,13 +165,15 @@ export default function PublicBoard() {
                       {announcement.category}
                     </span>
                   )}
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-semibold leading-tight">
-                    {announcement.title}
-                  </h2>
+                  <h2 
+                    className="text-2xl sm:text-3xl md:text-4xl font-display font-semibold leading-tight"
+                    dangerouslySetInnerHTML={{ __html: announcement.title }}
+                  />
                   {announcement.summary && (
-                    <p className="text-lg md:text-xl text-white/70 font-light line-clamp-2">
-                      {announcement.summary}
-                    </p>
+                    <p 
+                      className="text-lg md:text-xl text-white/70 font-light line-clamp-2"
+                      dangerouslySetInnerHTML={{ __html: announcement.summary }}
+                    />
                   )}
                 </div>
                 <div className="bg-white p-3 rounded-xl shrink-0 self-center sm:self-auto">

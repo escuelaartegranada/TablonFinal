@@ -114,7 +114,10 @@ export default function AdminAnnouncements() {
                 filteredAnnouncements.map((a) => (
                   <tr key={a.id} className="border-b border-border hover:bg-secondary/20 transition-colors">
                     <td className="p-4">
-                      <div className="font-medium text-foreground">{a.title}</div>
+                      <div 
+                        className="font-medium text-foreground"
+                        dangerouslySetInnerHTML={{ __html: a.title }}
+                      />
                       {a.category && <div className="text-xs text-muted-foreground mt-1">{a.category}</div>}
                     </td>
                     <td className="p-4">{getStatusBadge(a)}</td>

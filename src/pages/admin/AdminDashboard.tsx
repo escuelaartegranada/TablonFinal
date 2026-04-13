@@ -76,7 +76,10 @@ export default function AdminDashboard() {
                 <div key={a.id} className="flex items-center justify-between p-4 rounded-xl bg-secondary/50 border border-border">
                   <div className="flex items-center gap-4">
                     <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                    <span className="font-medium">{a.title}</span>
+                    <span 
+                      className="font-medium"
+                      dangerouslySetInnerHTML={{ __html: a.title }}
+                    />
                   </div>
                   <Link to={`/admin/anuncios/${a.id}`} className="text-sm text-primary hover:underline">
                     Editar

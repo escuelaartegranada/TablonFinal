@@ -51,9 +51,10 @@ export default function AnnouncementDetail() {
           </div>
         )}
 
-        <h1 className="text-3xl md:text-4xl font-display font-bold leading-tight mb-4 text-balance">
-          {announcement.title}
-        </h1>
+        <h1 
+          className="text-3xl md:text-4xl font-display font-bold leading-tight mb-4"
+          dangerouslySetInnerHTML={{ __html: announcement.title }}
+        />
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
           <Calendar size={16} />
@@ -61,9 +62,10 @@ export default function AnnouncementDetail() {
         </div>
 
         {announcement.summary && (
-          <p className="text-xl font-light text-foreground/80 leading-relaxed mb-8 text-balance">
-            {announcement.summary}
-          </p>
+          <p 
+            className="text-xl font-light text-foreground/80 leading-relaxed mb-8"
+            dangerouslySetInnerHTML={{ __html: announcement.summary }}
+          />
         )}
 
         {announcement.content && (
