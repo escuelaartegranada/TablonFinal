@@ -157,7 +157,7 @@ export default function PublicBoard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
-                className="w-full bg-white/5 backdrop-blur-sm border border-white rounded-3xl p-6 md:p-8 flex flex-col sm:flex-row gap-6 md:gap-8 items-start sm:items-center"
+                className="w-full bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 md:p-8 flex flex-col sm:flex-row gap-6 md:gap-8 items-start sm:items-center"
               >
                 <div className="flex-1 flex flex-col gap-3 md:gap-4">
                   {announcement.category && (
